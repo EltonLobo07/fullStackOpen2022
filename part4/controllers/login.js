@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
 		const requiredUserInfo = {username : user.username, id : user.id}; 
 		const token = jwt.sign(requiredUserInfo, config.SECRET);
 
-		res.json({token, username});
+		res.json({token, username, name : user.name});
 	}
 	catch (err)
 	{

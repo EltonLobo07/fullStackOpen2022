@@ -18,6 +18,18 @@ router.get("/", async (req, res, next) => {
 	}
 });
 
+router.get("/:id", async (req, res, next) => {
+	try
+	{
+		const result = await Blog.findById(req.params.id).populate("user", {username : 1, name : 1, id : 1});
+		res.json(result);
+	}
+	catch(err)
+	{
+		next(err);
+	}
+});
+
 router.post("/", middleware.userExtractor, async (req, res, next) => {
 	try
 	{
@@ -70,9 +82,10 @@ router.delete("/:id", middleware.userExtractor, async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
 	try 
 	{
+		// console.log(req.body);
 		const { title, author, url, likes } = req.body;
 
-		const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, {title, author, url, likes} , {new : true});
+		const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, {title, author, url, likes} , {new : true}).populate("user", {username : 1, name : 1, id : 1});
 		
 		if (updatedBlog)
 			return res.json(updatedBlog);
