@@ -1,19 +1,14 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle, useCallback } from "react";
 
-const Togglable = (props, ref) => {
+const Togglable = forwardRef((props, ref) => {
 	const [visible, setVisible] = useState(false);
 
 	const hideWhenVisible = { display : visible ? "none" : " " };
 	const showWhenVisible = { display : visible ? " " : "none" };
-	const toggleVisibility = () => {
-		console.log("Toggle function called");
-		setVisible(!visible);
-	};
 
-	useImperativeHandle(ref, () => {
-		console.log("Reference initialized now");
-		return toggleVisibility;
-	}, []);
+	const toggleVisibility = useCallback(() => setVisible(!visible), [visible]);
+
+	useImperativeHandle(ref, () => toggleVisibility, [toggleVisibility]);
 
 	const style = { marginTop : "1rem", marginBottom : "1rem" };
 
@@ -30,6 +25,8 @@ const Togglable = (props, ref) => {
 			</div>
 		</div>
 	);
-};
+});
 
-export default forwardRef(Togglable);
+Togglable.displayName = "Togglable";
+
+export default Togglable;

@@ -24,15 +24,13 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("createBlogAndRefresh", function(title, author, url, baseUrl) {
+Cypress.Commands.add("createBlog", function(title, author, url, baseUrl) {
 	cy.contains("new note").click();
 
 	cy.get("#title").type(title);
 	cy.get("#author").type(author);
 	cy.get("#url").type(url);
 	cy.get("button[type=submit]").click();
-
-	cy.visit(baseUrl);
 });
 
 Cypress.Commands.add("loginAndSaveDetailsToLS", function(username, password, baseUrl, userKeyLS) {

@@ -9,7 +9,6 @@ describe("Blog app", function() {
 		// Create a new user
 		cy.request("POST", baseUrl + "api/users", {username, password, name});
 
-		// Refresh the page
 		cy.visit(baseUrl);
 	});
 
@@ -55,7 +54,7 @@ describe("Blog app", function() {
 		});
 	});
 
-	describe("When logged in", function() {
+	describe.only("When logged in", function() {
 		const title = "Initial test blog", author = "John Smith", url = "https://www.google.com/";
 
 		beforeEach(function() {
@@ -63,16 +62,16 @@ describe("Blog app", function() {
 
 			cy.visit(baseUrl);
 
-			cy.createBlogAndRefresh(title, author, url, baseUrl);
+			cy.createBlog(title, author, url, baseUrl);
 		});
 
 		it("A blog can be created", function() {
 			const title = "Test blog", author = "John Smith", url = "https://www.google.com/";
 
 			// Check the html content doesn't contain the title of the blog 
-			// which is added using the next createBlogAndRefresh command later below
+			// which is added using the next createBlog command later below
 			cy.get("html").should("not.contain", title);
-			cy.createBlogAndRefresh(title, author, url, baseUrl);
+			cy.createBlog(title, author, url, baseUrl);
 
 			// The blog will be displayed now, so the title should be visible
 			cy.contains(title);
@@ -80,7 +79,7 @@ describe("Blog app", function() {
 
 		it("A user can increase the \"likes\" count of any listed blog", function()
 		{
-			// Clicking on the "view" button expands the blog which contains a like button and more details of the blog
+			// Clicking on the "view" button expands the blog which contains a like button and more details about the blog
 			cy.contains("view").click();
 
 			// Initially, the like count should be 0 (the default value)
@@ -107,7 +106,7 @@ describe("Blog app", function() {
 			cy.contains(`Blog: ${title} by ${JSON.parse(localStorage.getItem(userKeyLS)).name} deleted successfully`)
 
 			// The message disappears after roughly 5 seconds
-			// After the disappearance of the message, blog title should not be present iin the html content
+			// After the disappearance of the message, blog title should not be present in the html content
 			cy.get("html", {timeout : 6000}).should("not.contain", title);			
 		});
 
@@ -131,12 +130,14 @@ describe("Blog app", function() {
 			cy.get(".removeButton").should("not.contain", "remove");
 		});
 
-		it("The listed blogs are sorted in descending order based on the \"likes\" count", function() {
+		it.only("The listed blogs are sorted in descending order based on the \"likes\" count", function() {
 			const secondBlogTitle = "Test blog 2", secondBlogAuthor = "Test author 2", secondBlogUrl = "https://www.google.com/";
 
 			// Create a new blog entry
-			cy.createBlogAndRefresh(secondBlogTitle, secondBlogAuthor, secondBlogUrl, baseUrl);
+			cy.createBlog(secondBlogTitle, secondBlogAuthor, secondBlogUrl, baseUrl);
 
+			// cy.visit(baseUrl);
+			// cy.wait(6000);
 			cy.get(".blog").eq(0).contains(title);
 			cy.get(".blog").eq(1).contains(secondBlogTitle);
 
