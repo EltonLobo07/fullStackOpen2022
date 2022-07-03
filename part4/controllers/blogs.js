@@ -45,11 +45,13 @@ router.post("/", middleware.userExtractor, async (req, res, next) => {
 		const blog = new Blog(newBlog);
 
 		const result = await blog.save();
-		
+
 		selectedUser.blogs = selectedUser.blogs.concat(result._id);
 		await selectedUser.save();
 
-		res.status(201).json(result);
+		const finalResult = await Blog.findById(result._id).populate("user", {username : 1, name : 1, id : 1});
+
+		res.status(201).json(finalResult);
 	}
 	catch (err)
 	{

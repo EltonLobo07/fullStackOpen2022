@@ -14,7 +14,6 @@ const addBlog = blogObj => {
 
 	return axios
 		.post(baseUrl, blogObj, config)
-		.then(res => axios.get(baseUrl + "/" + res.data.id))
 		.then(finalRes => finalRes.data);
 };
 
