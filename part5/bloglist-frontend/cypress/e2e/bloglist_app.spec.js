@@ -54,7 +54,7 @@ describe("Blog app", function() {
 		});
 	});
 
-	describe.only("When logged in", function() {
+	describe("When logged in", function() {
 		const title = "Initial test blog", author = "John Smith", url = "https://www.google.com/";
 
 		beforeEach(function() {
@@ -130,14 +130,16 @@ describe("Blog app", function() {
 			cy.get(".removeButton").should("not.contain", "remove");
 		});
 
-		it.only("The listed blogs are sorted in descending order based on the \"likes\" count", function() {
+		it("The listed blogs are sorted in descending order based on the \"likes\" count", function() {
 			const secondBlogTitle = "Test blog 2", secondBlogAuthor = "Test author 2", secondBlogUrl = "https://www.google.com/";
 
 			// Create a new blog entry
 			cy.createBlog(secondBlogTitle, secondBlogAuthor, secondBlogUrl, baseUrl);
 
-			// cy.visit(baseUrl);
+			cy.visit(baseUrl);
+			//      OR
 			// cy.wait(6000);
+			
 			cy.get(".blog").eq(0).contains(title);
 			cy.get(".blog").eq(1).contains(secondBlogTitle);
 
